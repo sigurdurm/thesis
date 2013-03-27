@@ -145,21 +145,21 @@
 \newcommand*{\FACULTY}[1]{\def\FACNAME{#1}}
 \newcommand*{\subject}[1]{\def\subjectname{#1}}
 \newcommand*{\keywords}[1]{\def\keywordnames{#1}}
-\supervisor  {}
+\supervisor  {Julian Togelius, Rasmus Pagh}
 \examiner    {}
-\degree      {}
-\authors     {}
-\university  {\texorpdfstring{\href{University Web Site URL Here (include http://)}
+\degree      {Master of Computer Science}
+\authors     {Sigurdur Karl Magnusson}
+\university  {\texorpdfstring{\href{University Web Site URL Here (include http://www.itu.dk)}
+                {IT University of Copenhagen}}
                 {University Name}}
-                {University Name}}
-\UNIVERSITY  {\texorpdfstring{\href{University Web Site URL Here (include http://)}
-                {UNIVERSITY NAME (IN BLOCK CAPITALS)}}
+\UNIVERSITY  {\texorpdfstring{\href{University Web Site URL Here (include http://www.itu.dk)}
+                {IT UNIVERSITY OF COPENHAGEN}}
                 {UNIVERSITY NAME (IN BLOCK CAPITALS)}}
 \department  {\texorpdfstring{\href{Department or School Web Site URL Here (include http://)}
-                {Department or School Name}}
+                {Software Development and Technology}}
                 {Department or School Name}}
 \DEPARTMENT  {\texorpdfstring{\href{Department or School Web Site URL Here (include http://)}
-                {DEPARTMENT OR SCHOOL NAME (IN BLOCK CAPITALS)}}
+                {SOFTWARE DEVELOPMENT AND TECHNOLOGY}}
                 {DEPARTMENT OR SCHOOL NAME (IN BLOCK CAPITALS)}}
 \group       {\texorpdfstring{\href{Research Group Web Site URL Here (include http://)}
                 {Research Group Name}}
@@ -168,10 +168,10 @@
                 {RESEARCH GROUP NAME (IN BLOCK CAPITALS)}}
                 {RESEARCH GROUP NAME (IN BLOCK CAPITALS)}}
 \faculty     {\texorpdfstring{\href{Faculty Web Site URL Here (include http://)}
-                {Faculty Name}}
+                {Computer Science}}
                 {Faculty Name}}
 \FACULTY     {\texorpdfstring{\href{Faculty Web Site URL Here (include http://)}
-                {FACULTY NAME (IN BLOCK CAPITALS)}}
+                {COMPUTER SCIENCE}}
                 {FACULTY NAME (IN BLOCK CAPITALS)}}
 \addresses   {}
 \subject     {}
@@ -201,13 +201,15 @@
       {\LARGE \authornames \par}
       \vfill
       {\large A thesis submitted in partial fulfillment for the \par}
-      {\large degree of Doctor of Philosophy \par}
-      \bigskip
+      {\large degree of Master of Science in IT\par}
       \bigskip
       {\large in the \par}
       {\large \facname \par}
       {\large \deptname \par}
       \bigskip
+      \bigskip
+      {\normalsize Supervisors\par}
+      {\normalsize \supname \par}
       \bigskip
       \bigskip
       {\Large \@date \par}
@@ -229,28 +231,6 @@
   \global\let\date\relax
   \global\let\and\relax
   \cleardoublepage
-}
-\newenvironment{abstract}
-{
-  \btypeout{Abstract Page}
-  \thispagestyle{empty}
-  \null\vfil
-  \begin{center}
-    \setlength{\parskip}{0pt}
-    {\normalsize \UNIVNAME \par}
-    \bigskip
-    {\huge{\textit{Abstract}} \par}
-    \bigskip
-    {\normalsize \facname \par}
-    {\normalsize \deptname \par}
-    \bigskip
-    {\normalsize Doctor of Philosophy\par}
-    \bigskip
-    {\normalsize\bf \@title \par}
-    \medskip
-    {\normalsize by \authornames \par}
-    \bigskip
-  \end{center}
 }
 {
   \vfil\vfil\vfil\null
