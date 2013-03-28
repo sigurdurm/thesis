@@ -4,8 +4,19 @@
 \label{Chapter3}
 \lhead{Chapter 3. \emph{Related Work}} % Write in your own chapter title to set the page header
 
+In subsequent sections we will give a overview of related and recent work that we found. 
+We start with looking into Clustering Player Behaviours and then we dive into numerous work related to K-Means when clustering a finite stream of data, endless data streams and finally different K-Means Map-Reduce implementations and results.
 
-\section{Player Behaviours}
-\section{Clustering}
-\subsection{Streaming}
+\section{Clustering Player Behaviours}
+
+\section{K-Means Clustering}
+K-Means is one of the most studied clustering algorithm out there and is still actively researched. It's a simple algorithm that partition the data into \textit{k} partitions. From it appearance in YEAR CITE, people have been researching and finding different solutions to what K-Means is lacking. The problem with manually set number of partitions, initializing the centers for the k clusters and dealing with outliers in data. 
+
+Our work relates to both working with a stream of data of length \textit{n} that doesn't fit in memory and the incrementally evolving characteristics of clustering endless data streams. The Map-Reduce framework allows us to implement a scalable clustering algorithm that work on a different segments of the data in parallel.
+
+\subsection{Streaming algorithms}
+Clustering large data that doesn't fit main memory starts normally with dividing the data set into similar sized portions of data and run clustering on each portion. O'Callaghan et al. introduced an algorithm called LocalSearch 
+\subsubsection{Map-Reduce}
+
 \subsection{Data Streams}
+
