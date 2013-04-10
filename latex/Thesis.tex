@@ -12,6 +12,8 @@
 \usepackage{vector}  % Allows "\bvec{}" and "\buvec{}" for "blackboard" style bold vectors in maths
 \hypersetup{urlcolor=blue, colorlinks=true}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 
+\setlength{\parindent}{0.8cm}
+%\setlength{\parskip}{0pt}
 %% ----------------------------------------------------------------
 \begin{document}
 \frontmatter	  % Begin Roman style (i, ii, iii, iv...) page numbering
@@ -19,7 +21,7 @@
 % Set up the Title Page
 \title  {Clustering Player Behaviors in Data Streams with K-Means in Map-Reduce}
 \authors  {\texorpdfstring
-            {\href{sigurdur@gmail.com}{Sigurdur Karl Magnusson}}
+            {\href{sigurdurm@gmail.com}{Sigurdur Karl Magnusson}}
             {Sigurdur Karl Magnusson}
             }
 \addresses  {\groupname\\\deptname\\\univname}  % Do not change this here, instead these must be set in the "Thesis.cls" file, please look through it instead
@@ -95,7 +97,7 @@ For this purpose, \dots was \dots (\emph{methodology}). It was found that \dots
 \acknowledgements{
 \addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
 
-The acknowledgements and the people to thank go here, don't forget to include your project advisor\ldots
+The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
 
 }
 \clearpage  % End of the Acknowledgements
@@ -165,9 +167,10 @@ The acknowledgements and the people to thank go here, don't forget to include yo
 \backmatter
 
 %% ----------------------------------------------------------------
+\newcommand*{\doi}[1]{\href{http://dx.doi.org/\detokenize{#1}}{doi: \detokenize{#1}}}
 \label{Bibliography}
 \lhead{\emph{Bibliography}}  % Change the left side page header to "Bibliography"
-\bibliographystyle{plain}  % Use the "unsrtnat" BibTeX style for formatting the Bibliography
+\bibliographystyle{unsrtnat}  % Use the "unsrtnat" BibTeX style for formatting the Bibliography
 \bibliography{Bibliography}  % The references (bibliography) information are stored in the file named "Bibliography.bib"
 
 \end{document}  % The End
