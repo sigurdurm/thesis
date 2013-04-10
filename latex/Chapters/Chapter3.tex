@@ -4,18 +4,34 @@
 \label{Chapter3}
 \lhead{Chapter 3. \emph{Related Work}} % Write in your own chapter title to set the page header
 
-In subsequent sections we will give a overview of related and recent work that we found. 
-We start with looking into Clustering Player Behaviours and then we dive into numerous work related to K-Means when clustering a finite stream of data, endless data streams and finally different K-Means Map-Reduce implementations and results.
+In subsequent sections we will give a overview of some of the related and recent work. We start with looking into work related to Clustering Player Behaviors and then we dive into numerous work related to clustering large set of data using the k-means algorithm, where we can have a finite stream of data, an endless and evolving data stream and finally some parallel clustering implementations in the Map-Reduce framework. In our work we focus on processing large amount of data of finite length in parallel using Map-Reduce that arrives each day. The behavior of the data can change from day to day like when dealing with an endless stream of data but is not in the scope and is discussed in future work in the Conclusions section. [TODO].
 
-\section{Clustering Player Behaviours}
+\section{Clustering Player Behaviors}
+Many researches have been done on clustering and predicting player behaviors over the years to get a better understanding which kind of groups of behaviors are playing a game by exploring user telemetry and player events that is being logged as a the game is being played.
 
-\section{K-Means Clustering}
-K-Means is one of the most studied clustering algorithm out there and is still actively researched. It's a simple algorithm that partition the data into \textit{k} partitions. From it appearance in YEAR CITE, people have been researching and finding different solutions to what K-Means is lacking. The problem with manually set number of partitions, initializing the centers for the k clusters and dealing with outliers in data. 
+\section{Clustering Large Data}
+K-means is one of the most studied clustering algorithm out there and is still actively researched. It's a simple algorithm that partition the data into \textit{k} partitions by minimizing its objective function sum of squared error. From its appearance in a standard version by Stuart Lloyd in 1982 \citep{Lloyd:1982} , it has been one of the most popular clustering algorithm to research because of its simplicity. There are many different research areas regarding k-means. The problem with manually set the number k of partitions, initializing the centers for the partitions and dealing with outliers in data. In recent years k-means has also been very popular algorithm to study in the Map-Reduce framework where the k-means algorithm can easily be applied to cluster large amount of data sets in parallel. We start with going through work relates to both working with a stream of data of length \textit{n} that doesn't fit in memory and the incrementally evolving characteristics of clustering endless data streams.
 
-Our work relates to both working with a stream of data of length \textit{n} that doesn't fit in memory and the incrementally evolving characteristics of clustering endless data streams. The Map-Reduce framework allows us to implement a scalable clustering algorithm that work on a different segments of the data in parallel.
+We start with a famous work by Guha et al. \citep{Guha:2003} where they introduce the STREAM algorithm that is based on the divide-and-conquer strategy and achieves a constant-factor approximation solving the k-median problem (a k-means variant). The algorithm divides the dataset into m pieces of similar sizes. Each of the pieces are independently clustered sequentially and all the centers from all the pieces are then clustered further. They show a new k-median algorithm called LSEARCH that is used by the stream algorithm and is based on local search algorithm solving the facility location problem \citep{Charikar:1999} to solve the k-median problem. Results show that LSEARCH produced better quality clusters than k-means and the hierarchical algorithm BIRCH \citep{Zhang:1996} but took longer to run.
 
-\subsection{Streaming algorithms}
-Clustering large data that doesn't fit main memory starts normally with dividing the data set into similar sized portions of data and run clustering on each portion. O'Callaghan et al. introduced an algorithm called LocalSearch 
+In 2009 Ailon et al. \citep{Ailon:2009} extended the the work of Guha et al. mentioned above and showed an one pass streaming algorithm for k-means with approximation guarantees. Achieving that they introduced a new algorithm called k-means\# that builds on the non-streaming algorithm k-means++ by Arthur et al. [CITE] that is a combined algorithm of seeding the initial centers and running k-means. k-means\# provides a bi-criterion $ (\alpha,\beta) $ approximation algorithm by choosing $\alpha * k $ centers with approximation factor $\beta$. In the divide-and-conquer strategy they run the k-means\# independently on each piece of the data to achieve $O(k log k)$ random centers non-uniformly and use the k-means++ algorithm introduced in work of Arthur et al. [CITE] to find k centers from the intermediate centers found in all of the pieces of the data set. 
+
+Another approach using a coreset by selecting a weighted subset from the original data set such that by running any k-means algorithm on the subset will give near similar results to running k-means on the original data set. Ackermann et al. [CITE] showed a new algorithm called StreamKM++ that uses k-means++ algorithm from Arthur et al. to solve k-means on the subset and also introduce a new data structure called coreset tree to speed up the time for the sampling in the center initialization. StreamKM++ is a streaming version of k-means++ to cluster large data sets. Their approach was shown to be on par with LSEARCH algorithm in cluster quality but outperformed BIRCH by factor of 2. A recent work by Shindler et al. [CITE] proposed an algorithm called \textit{Fast streaming k-means} based on the online facility location algorithm [CITE Adam Meyerson] and extends the work of TODO [CITE] by proving faster running time and a better approximation factor. Their algorithm outperformed both work of Ailon et al. [CITE] and Ackermann et al. [CITE].  
+
+Adam Meyerson 
+Online facility location. italic{In FOCS}, 2001
+
+
+A different approach was introduced by Sculley in 2010 [CITE]. Using sampling and a gradient descent, Sculley [CITE] introduced a new algorithm called Mini-batch k-means that yields excellent clustering results with low computational cost for large datasets. The algorithm initializes the k centers like the normal k-means algorithm but then for each iteration it picks $b$ examples from the dataset and for each point in the example the center which it is closest to is updated by taking a gradient descent step towards the point, with a learning rate of that center. The approach scales when datasets grow large with redundant examples and allowing convergence to better solutions compared to the on-line stochastic gradient descent (SGD) variant proposed by Bottou et al. [CITE].
+
+Turning to clustering a data stream where data arrives continuously and the behavior of the stream can change over time. This area of research is very popular in the recent years where generating data is rapid, has an unknown length and not possible to access historic data points seen before because of the amount of data. 
+
+MapReduce.
+A parallel version of k-means++ initialization algorithm can be found in the work of Bahmani et al from 2012 [CITE]. The algorithm is called k-means$||$ and is implemented in the Map-Reduce framework and they show it outperforms the k-means++ algorithm in both sequential and parallel settings.
+
+
+
+
 \subsubsection{Map-Reduce}
 
 \subsection{Data Streams}
