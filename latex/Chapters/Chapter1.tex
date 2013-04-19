@@ -1,14 +1,13 @@
 % Chapter 1
 
-\chapter{Chapter Title Here} % Write in your own chapter title
+\chapter{Introduction} % Write in your own chapter title
 \label{Chapter1}
 \lhead{Chapter 1. \emph{Introduction}} % Write in your own chapter title to set the page header
 
 \section{Motivation}
-We live in a time of data, where data is growing at an amazing rate. Data is everywhere around us and companies are generating more and more data.
-Storing data is cheaper than ever and many smaller and mid-sized companies are buying storage subscriptions at other bigger companies that offer "Storage as a Service" (SaaS). A SaaS company offers e.g. data reliability and durability by storing critical data in multiple facilities and on multiple devices. 
-Having all this data does not give a meaning by itself, it needs to be analysed and interpret to give a business value.
-\null\vfill
+We live in a world where data is being generated and stored at an amazing rate everywhere around us. Data can describe characteristics of e.g. Internet activities, social interactions, user actions and behaviors in games, scientific experiments and measurements from different devices and sensor equipments. Amount of data that is being registered and logged around us is growing in volume and complexity and storing the data in large databases or in more commonly on-line storage model called cloud storage just gets cheaper and cheaper. We live in a world of data and we are just at the beginning of its existence. 
+
+\null
 % Now comes the "Funny Quote", written in italics
 \textit{``Information is the oil of the 21st century, and analytics is the combustion engine.''}
 
@@ -16,10 +15,21 @@ Having all this data does not give a meaning by itself, it needs to be analysed 
 Peter Sondergaard, senior VP at Gartner
 \end{flushright}
 
+In digital games, data about in-game user interactions have been logged and behaviors analyzed since the first game came out. Analyzing the user experience and behaviors of players have mostly been done in laboratories in the past, both during game development and after game launch to see if the game was played as designed. Game designs have becoming increasingly complex in the recent years offering much more freedom to the players by increasing the number of actions available, items to interact with and on-line massive multi-player persistent worlds that continue to exist after a player exits a game \citep{Kim:2008Tracking, Drachen:2011Evaluating}. This complexity generates much more user-centric data than before and is increasingly challenging when evaluating game designs \cite{Pagulayan:2002UserDesign, Seif:2013GameAnalytics}. The user interactions being registered is called \textit{user telemetry} and is translated to \textit{game metrics} as referred in game development, providing detailed and objective numbers, e.g. total playtime, monsters killed, puzzles solved.
 
-The need to analyse all this data have caused many new companies to rise up that are specialised in analysing large quantities of data, extracting knowledge and converting it to a business value. Many of those companies offer "Analytics as a Service" (AaaS) that offer an analytical software to discover trends and unknown patterns in the data.
+Collecting user's telemetry can give very detailed quantitative information on player behavior and using data mining techniques can supplement traditional qualitative approaches with large-scale behavioral analysis \citep{Yannakakis:2012}, for example show where users are getting stuck and finding actionable behavioral profiles \citep{Kim:2008Tracking, Drachen:2012, Drachen:2011Evaluating}. In the recent years user behavior analysis have in part been driven by the emergence of massive multi-player on-line games (MMOG) and Free-to-Play (F2P) games which can have millions of users and objects that can form highly complex interactions. These game models, especially of persistent nature, are constantly monitoring users actions and their behaviors by driving their revenue with subscriptions or offer players to buy virtual items via micro transactions \citep{Kim:2008Tracking, Drachen:2011Evaluating, Fields:2011SocialGame, Seif:2013GameAnalytics}. 
+
+One way of doing a behavioral analysis is use an unsupervised machine learning technique called clustering. Cluster analysis is a popular exploratory data mining technique that groups set of data objects together in a cluster that are more similar to each other than data objects in other groups \citep{Xu:2005Clustering}. Human beings categorizes or classifies a new object or a phenomenon based on similarity or dissimilarity of the object's descriptive features and is one of most primitive activies of humans \citep{Anderberg:1973ClusterAnalysis}. Clustering explores the unknown patterns of the data and provide compressed data representation for large-scale data. In computer games cluster analysis or behavioral categorization can find behavioral profiles that are actionable and give high valuable insights into the game development as well as increasing the monetization \cite{Drachen:2009Tomb, Mahlmann:2010Tomb}. 
+
+Most clustering algorithms are designed for modern sizes of datasets where the whole data can fit into memory or allows few passes into a database (where each data object is read more than once). It can be very expensive analyzing large-scale datasets and to get answers efficiently then one needs to reduce the set of data to be analyzed, e.g. sample fewer players and have fewer features (dimensions) to be compared. Computations for large-scale data takes time and needs to be distributed to be able to complete in reasonable amount of time. Google's MapReduce programming model was introduced in 2004 \citep{Dean:2004} and allows automatic parallelization and distribution of computations on large clusters of commodity computers. Allowing programmers and researchers to easily implement highly scalable algorithms to process large amount of data using the MapReduce model without worrying about handling failures and distributing the data with a large amount of complex code. 
 
 \section{Problem Statement}
+\begin{center}
+How are the player behaviors in game XXX and how can these findings aid game development?
+\end{center}
+
+Considering the massive size of user telemetry data being logged and processed and the complexity of game designs there is a knowledge gap when it comes to analyzing such large-scale data efficiently.  
+
 GameAnalytics.com is a cloud hosted service for collecting, analyzing and reporting game metrics. Working with large quantities of game metric data that needs to be analysed and processed efficiently. 
 
 A valuable application for GA is to design and implement a scalable streaming version of a clustering algorithm. That can read a large data in mini-batches into memory and cluster the data incrementally. 
