@@ -5,15 +5,55 @@
 \lhead{Chapter 2. \emph{Background Theory}} % Write in your own chapter title to set the page header
 
 
-\section{Player Behaviour}
-\subsection{Game Metric}
-\subsection{Features}
-\section{Clustering}
-\subsection{K-Means}
+\section{Player Behavior Profiles}
+\textit{TODO Describe player behavior}
 
-Many clustering methods exists but one of the most popular ones is called \textit{k-means} \citep{Lloyd:1982}, where k-means groups the data into \textit{k} partitions or clusters and gives insights into the general distribution in those clusters. The objective function in k-means is to minimize the squared error distance to its clusters centers. *TODO* more about k-means. 
+\lipsum[1-2]
+
+\subsection{Game Metric}
+
+\textit{TODO Describe User Telemetry and Game Metric. Features and behavioral variables}
+
+\lipsum[2-3]
+
+\section{Clustering}
+\textit{TODO Describe clustering}
+
+\lipsum[4-5]
+
+\subsection{K-means Algorithm}
+\textit{TODO Describe k-means}
+
+Many clustering methods exists but one of the most popular ones is called the \textit{k-means} algorithm [Forgy CITE]. The k-means term was first used by MacQueen, J. (1967)[CITE] but the idea goes back to Steinhaus, H. (1957)[CITE]. K-means seeks to group data into \textit{k} partitions or clusters and gives insights into the general distribution in those clusters. The objective function in k-means minimizes the sum-of-squared-error. For example given set $S=\{1...,n\}$ set of $n$ data objects, where each data point $x$ is a real number $d$-dimensional vector $x_i \in \Re^d, i=1...,n$ and we want to partition them into \textit{k} clusters $C=\{C_1...,C_k\}$, then the objective function is defined as
+
+
+\begin{center}
+$J(C)=\displaystyle \sum_{k=1}^{K}\displaystyle \sum_{x_i \in C_k}\left \| x_i-\mu_k \right \|^2$ 
+\end{center}
+
+where $\left \| x_i-\mu_k \right \|^2$ is a chosen distance measure between a data point $x_i$ and its cluster center (mean) $\mu_k$, the function $J(C)$ is the overall distance of \textit{n} data points from their respective clusters.
+
+
+TODO check below text and compare to history... Lloyd vs Forgy.
+
+The standard algorithm was published by Lloyd, S. (1982) \citep{Lloyd:1982} but was first proposed by Lloyd, S. in 1957 inside Bell labs. The k-means algorithm also referred as the Lloyd's algorithm uses a an iterative refinement method. 
+
+
+
+
+\lipsum[5]
+
+\subsection{Player Behaviors}
+\textit{TODO Describe clustering player behaviors with focus using k-means}
 
 K-means algorithm have been shown to be very useful in behavioral analysis to give good insights in the general behaviors found in a game [CITE].
 
-\subsection{Streaming and Data Streams}
-\section{Map-Reduce and Hadoop}
+\lipsum[6]
+
+
+\section{MapReduce and Large-Scale Data}
+\textit{TODO Describe MapReduce and Large-Scale data}
+
+\lipsum[7-9]
+
+
