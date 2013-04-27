@@ -20,30 +20,37 @@
 The goal of clustering is to categories or groups similar objects together into so called clusters (hidden data structures) while different objects belong to other clusters. A cluster are set of objects that are similar to each other, while objects in different clusters are dissimilar to each other. Identifying descriptive features of an object one can compare these features to a known object based on their similarity or dissimilarity based on some criteria. Cluster analysis can be achieved by various algorithms and is a common technique in statistical data analysis that is used in many fields, e.g. machine learning, pattern recognition, image analysis and bioinformatics. In this thesis we focus on a popular clustering algorithm called k-means that is a centroid based clustering algorithm where a cluster is represented by a central vector called centroid.
 
 \subsection{K-means clustering method}
-Many clustering methods exists but one of the most popular ones is called \textit{k-means} \citep{FORGYE.W.:1965,MacQueen:1967KMeans}, also known as the Lloyd algorithm \citep{Lloyd:1982} which was further generalized for vector quantization \citep{Linde:1980VQ}. K-means seeks to group similar data points into \textit{k} partitions or hyperspherical clusters using a distance measure and giving insights into the general distributions in the dataset. A cluster is represented by a centroid that characterize the geometric center of the cluster that is calculated as the mean of all data instances belonging to that cluster. The objective function in k-means is to minimizes the squared error between a cluster's centroid (mean) and its assigned points and over all set of clusters minimizing the Sum of Squared Error (SSE). Let a set of data points $x_i \in \Re^d, i=1,...,N$, where each point $x$ is a real number $d$-dimensional vector and we want to partition them into \textit{K} clusters $C=\{c_1,...,c_K\} \in \Re^d$, then the objective function is defined as
+Many clustering methods exists but one of the most popular ones is called \textit{k-means} \citep{FORGYE.W.:1965,MacQueen:1967KMeans}, also known as the Lloyd algorithm \citep{Lloyd:1982} which was further generalized for vector quantization \citep{Linde:1980VQ}. K-means seeks to group similar data points into \textit{k} partitions or hyperspherical clusters giving insights into the general distributions in the dataset. A cluster is represented by a centroid that characterize the geometric center of the cluster that is calculated as the mean of all data instances belonging to that cluster. The objective function in k-means is to minimizes the squared error between a cluster's centroid (mean) and its assigned points and over all set of clusters minimizing the Sum of Squared Error (SSE). Let a set of data points $x_i \in \Re^d, i=1,...,N$, where each point $x$ is a real number $d$-dimensional vector and we want to partition them into \textit{K} clusters $C=\{c_1,...,c_K\} \in \Re^d$, then the objective function is defined as
 
 \begin{center}
 $SSE =\displaystyle \sum_{k=1}^{K}\displaystyle \sum_{x_i \in c_k}\left \| x_i-\mu_k \right \|^2$ 
 \end{center}
 
-where $\left \| x_i-\mu_k \right \|$ is a chosen distance measure between a data point $x_i$ and its cluster centroid $\mu_k$ (mean). The centroid is calculated as 
+
+where $\mu_k$ is the mean vector for the cluster centroid $k$ and $\left \| x_i-\mu_k \right \|$ is a Euclidean distance measure between two points the data vector $x_i$ and the mean vector $\mu_k$, calculated respectively
 
 \begin{center}
 $\mu_k = \dfrac{1}{n_k}\displaystyle \sum_{x_i \in c_k}x_i,$ 
 \end{center}
 
-where $c_k$ is a cluster number $k$ and its corresponding $n_k$ data points $i=1,...,n_k$. The algorithm for the k-means starts by initializing $K$ centroids by choosing random data points from the dataset or according some heuristic procedure. In each iteration of the algorithm it assigns data points to it's nearest centroid by calculating the minimum distance to the $K$ centroids for each instance. After assigning all the data points to clusters the centroids are updated so they represent the mean value of all the points in the corresponding cluster. The algorithm stops the iteration when the centroids do not change from the previous iteration or the error (SSE) is below some specific threshold. Stopping can also be done by predefine a maximum number of iterations to be run. 
+where $c_k$ is a cluster number $k$ and its $n_k$ data points $i=1,...,n_k$. Euclidean distance function is defined as
+
+\begin{center}
+$\left \| x_i-y_i \right \| = \sqrt{\displaystyle \sum_{i=1}^{d}(x_i-y_i)^2} $
+\end{center}
+
+When running the k-means algorithm it starts by initializing $K$ centroids by choosing random data points from the dataset or according some heuristic procedure. In each iteration of the algorithm it assigns data points to it's nearest centroid by calculating the minimum Euclidean distance to the $K$ centroids for each instance. After assigning all the data points to clusters the centroids are updated so they represent the mean value of all the points in the corresponding cluster. The algorithm stops the iteration when the centroids do not change from the previous iteration or the error (SSE) is below some specific threshold. Also possible to manually define a maximum number of iterations to be run. 
 
 
 \textit{TODO INSERT PICTURE, showing some simple iterations...}
 
 
-One of the weaknesses of k-means is that it is sensitive of the initial selection of the centroids which can lead to local optimum, that is the algorithm converges and fails to find the global optimum. One solution is to run the algorithm $n$ times and pick the initialization that gave the lowest SSE result. Another weakness of k-means is that a user has to predefine the number of centers k-means need to cluster, this is most often not known in advance. Many methods exist and most popular one is to run the algorithm with by increasing the $k$ number of clusters to some $K$ and pick a good $k$ candidate using the popular Scree plots \citep{Han:2006DM}. Noise in data and outliers can dramatically increase the squared error and centroids shifting from data distribution in question towards outliers far away, thus representing skewed distributions. Solutions involve removing these noise in preprocessing or normalize the data with the zero mean normalization \citep{Xu:2005Clustering, Han:2006DM}.
+One of the weaknesses of k-means is that it is sensitive of the initial selection of the centroids which can lead to local optimum, that is the algorithm converges and fails to find the global optimum. One solution is to run the algorithm $n$ times and pick the initialization that gave the lowest SSE result. Another weakness of k-means is that a user has to predefine the number of centers k-means need to cluster, this is most often not known in advance. Many methods exist and most popular one is to run the algorithm with by increasing the $k$ number of clusters to some $K$ and pick a good $k$ candidate where the \textit{``elbow''} starts in the curve in a Scree plot \citep{Han:2006DM}. Noise in data and outliers can dramatically increase the squared error and centroids shifting from data distribution in question towards outliers far away, thus representing skewed distributions. Solutions involve removing these noise in preprocessing or normalize the data with the zero mean normalization \citep{Xu:2005Clustering, Han:2006DM}.
 
 %Example about local optimum%
 %For example imagine if the global optimum is three cluster centroids each representing three separate data distributions then the algorithm fails to find the global optimum %if it initializes two centroids in one distribution and the last centroid in between the other two distributions. The algorithm stops and converges to local optimum.
 
-The solution to the optimal partition can be found by checking all possibilities using a brute force method but that is a $NP$-hard problem \cite{Aloise:2009KmeansNPHard} and cannot be solved in a reasonable time. The k-means algorithm is a heuristic approach for the clustering problem with running time of the algorithm $O(NKdT)$ where $T$ is number of iterations. Usually $K,d$ and $T$ is much less than $N$, k-means is good for clustering large-scale data because of approximately linear time complexity.
+The solution to the optimal partition can be found by checking all possibilities using a brute force method but that is a $NP$-hard problem \cite{Aloise:2009KmeansNPHard} and cannot be solved in a reasonable time. The k-means algorithm is a heuristic approach for the clustering problem with running time of the algorithm $O(NKdT)$ where $N$ is number data examples in $d$-dimensional space and $T$ is the number of iterations. Usually $K,d$ and $T$ is much less than $N$ meaning that k-means is good for clustering large-scale data because of approximately linear time complexity.
 
 The above implementation of k-means is called the \textit{batch} k-means, where the centroids are updated after all the data points have been assigned. The \textit{online} (incremental) mode of the algorithm processes each data point sequentially. For each data point $x$ the nearest cluster centroid $c_{min}$ is calculated and that centroid is updated right away, defined as 
 
@@ -65,15 +72,33 @@ K-means algorithm have been shown to be very useful in behavioral analysis to gi
 
 
 \section{MapReduce and Large-Scale Data}
-\textit{TODO Describe MapReduce and Large-Scale data}
+MapReduce is a programming model introduced by Google in 2004 \citep{Dean:2004}, built on the divide-and-conquer paradigm, dividing a large-scale data into smaller chunks and process them in parallel. MapReduce enables fault-tolerant distributed computing on large-scale datasets and is a new way to interact with \textit{Big Data} where as old techniques are more complicated, costly and time consuming \citep{Dean:2004}. Google also introduced along with MapReduce a powerful distributed file system called \textit{Google File System} (GFS) that could hold massive amount of data. This led to a new open source software framework called Hadoop \citep{bialecki2005hadoop}, written in Java and is now maintained by Apache Foundation, a end-to-end solution for organizations that want to apply MapReduce. There are many Hadoop-related projects at Apache including the popular scalable machine learning and data mining library called Mahout, written also in Java. 
 
-MapReduce is a programming model introduced by Google in 2004 \citep{Dean:2004}, built on the divide-and-conquer paradigm, dividing a massive task into smaller chunks and process them in parallel. MapReduce enables fault-tolerant distributed computing on large-scale datasets and is a new way to interact with \textit{Big Data} where as old techniques are more complicated, costly and time consuming \citep{Dean:2004}. Google also introduced along with MapReduce a powerful distributed file system called \textit{Google File System} (GFS) that could hold massive amount of data. This led to a new open source software framework called Hadoop [CITE], which is a end-to-end solution for organizations that want to apply MapReduce. Hadoop builds on the MapReduce and GFS foundation, designed to abstract away much of the complexity of distributed processing running on large clusters of commodity computers. 
+Hadoop builds on the MapReduce and GFS foundation, designed to abstract away much of the complexity of distributed processing running on large clusters of commodity computers. The MapReduce programming model allows developers to write parallel distributed programs very easily by only implementing two functions called \textit{Map} and \textit{Reduce}. Developers don't need to worry about doing a complicated code to e.g. distribute work to computers, internal communication, data transfers and dealing with fault tolerance. Instead they can focus on the logic to solve the problem at a hand.
 
-...
-%MapReduce is a programming model used in the Hadoop project.
+\subsection{Programming Model}
+As mentioned before a developer only needs to implement two functions Map and Reduce. The \textit{Map} function takes as input pair and produces an intermediate $(key,value)$ pair. The Map functions are run in parallel and produce many intermediate output pairs which is then grouped together with the same \textit{key} by the MapReduce framework and is passed along to the \textit{Reduce} function. The Reduce function receives a key and all of its set of values from all the Map functions, then it merges these values and typically produces zero or one output key and value pair per Reduce invocation. 
+
+\textbf{Example} The counting occurrences of words in a document problem. The Map function receives each word as input and emits the word as a key with count of 1, e.g. we have set of words $w_1,...,w_n$ in a document then the output from all Map function would be the sequence of key value pairs: $(w_1,1),...,(w_n,1)$. The MapReduce framework then groups and merges all the $(key,value)$ pairs from all the Map functions and invokes the Reduce function with input key as a word and list of all the counts as the values: $(w_i,[v_1,...,v_n])$ where $w_i$ is a specific word with $1,...,n$ counts of 1, e.g. $(w_1, [1,1,1])$ if $w_1$ had 3 occurrences in the document. In the reduce function it will simply sum up all the counts and output a total count for each word. See Figures [TODO REFERENCES] below for examples how the Map and Reduce functions are implemented for the counting of words problem.
+
+
+\textit{TODO Pseudo code of the Map and Reduce function}
+
+The MapReduce also allows the developer to implement a \textit{Combiner} function to do a partial reducing task that is executed on the same computer node as the Map function. 
+
+
+\subsection{MapReduce Hadoop Execution}
+
+\subsection*{Map Task}
+
+\subsection*{Reduce Task}
+
+\subsection*{Combiner}
+
 
 \textit{TODO Draw picture of the MapReduce framework}
 
-\lipsum[7-9]
+
+\lipsum[7-8]
 
 
