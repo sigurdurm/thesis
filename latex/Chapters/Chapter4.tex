@@ -3,13 +3,13 @@
 \chapter{Methodology} % Write in your own chapter title
 \label{Chapter4}
 \lhead{Chapter 4. \emph{Methodology}} % Write in your own chapter title to set the page header
-
 \textit{TODO Describe introduction to the methodology}
+In this chapter we describe the real life game data set and the k-means MapReduce implementation process. We will also explain how the experiments are set-up and executed. Starting with describing the real life game dataset and how we preprocessed it. Building the training dataset from the user telemetry dataset, by selecting and building the relevant player behavior features or game metrics. This training set is then used as a input into our k-means algorithm to find the average player behaviors in the game, based on those game metrics. \textit{[TODO Explain better]}
 
-\lipsum[1]
+A k-means algorithm was implemented in MapReduce that is able to process large-scale datasets. We started to implement a simple version of k-means that assigns each point to a nearest cluster in the \textit{Map} function and calculates the new centroid in the \textit{Reduce} phase. Next version had a \textit{Combiner} implemented that performs a reduce work on the same computer node as the Mapper, by calculating intermediate sums of all points for each cluster from a Map function. This minimizes the data needed to be transferred and shuffled by the MapReduce framework to the Reducer, only sending an intermediate sum with each cluster centroid from each mapper instead of list of all points in each cluster. The final k-means version uses a more efficient way of calculating the distance to the nearest centroid for each point. Using a matrix calculation that returns a distance matrix that represents distances from all points to all centroids. These different versions are compared below in respect to time and space complexity.
+
 
 \section{Data and Preprocessing}
-
 \textit{TODO Describe the real game dataset and preprocessing}
 
 \lipsum[1-3]
@@ -23,22 +23,54 @@
 \section{K-means algorithm in MapReduce}
 \textit{TODO Describe the k-means algorithm implementation in MapReduce and the relevant pseudo codes and pictures}
 
+The MapReduce k-means algorithm was implemented using a framework called \textit{mrjob}~\footnote{http://pythonhosted.org/mrjob/}. Mrjob is a open-source Python framework actively maintained by Yelp~\footnote{http://opensource.yelp.com/}, that allows MapReduce jobs to be written in Python 2.5+ and executed on several platforms. Using mrjob allows for rapid implementation of MapReduce jobs by running them locally for development purposes and easily run them on your own Hadoop cluster or using the Amazon Elastic MapReduce (Amazon EMR)\footnote{http://aws.amazon.com/elasticmapreduce/}. Amazon EMR is a web service that allows developers to buy time on a Hadoop cluster to process large-scale data easily and cost-effectively.
+
+The Python programming language was chosen for this study because GameAnalytics (GA) also uses Python and mrjob to implement their MapReduce jobs. Allowing GA easily to use and build further on the implementation from this study. 
+
 \lipsum[1-2]
 
-\subsection{Map}
+
+\subsection{K-means - Map and Reduce version}
+\lipsum[1]
+
+\subsubsection{Map}
 \textit{TODO Describe the map function}
 
 \lipsum[1-2]
 
-\subsection{Combine}
+
+\subsubsection{Reduce}
+\textit{TODO Describe the Reduce function}
+
+\lipsum[7-8]
+
+\subsection{K-means - Map, Combine and Reduce version}
+\lipsum[1]
+
+\subsubsection{Combine}
 \textit{TODO Describe the Combine function}
 
 \lipsum[5-6]
 
-\subsection{Reduce}
+\subsection{K-means - Efficient version}
+\lipsum[1]
+
+\subsubsection{Map}
+\textit{TODO Describe the map function}
+
+\lipsum[1-2]
+
+\subsubsection{Combine}
+\textit{TODO Describe the Combine function}
+
+\lipsum[5-6]
+
+
+\subsubsection{Reduce}
 \textit{TODO Describe the Reduce function}
 
 \lipsum[7-8]
+
 
 \subsection{Distance measure}
 \textit{TODO Describe the distance measure used in k-means}
@@ -46,7 +78,7 @@
 \lipsum[1]
 
 
-\section{Experiment Set-Up}
+\section{Experiment Set-Up and Execution}
 \textit{TODO Describe the set-up for the experiments}
 
 \lipsum[1-3]

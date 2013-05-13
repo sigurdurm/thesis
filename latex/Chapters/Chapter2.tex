@@ -33,7 +33,7 @@ A sub-category of player metrics called \textit{gameplay metrics}, measures of a
 Gameplay metrics are however the most important player metric when evaluating player experience, game designs and quality assurance~\citep{Kim:2008Tracking, Drachen:2012, Drachen:2011Evaluating}, but are generally in low priority compared to the customer metrics~\citep{Drachen:2013Basics}.
 \begin{figure}[here]
 \centerline{\includegraphics[width=0.9\textwidth]{Figures/Hierarchical_diagram_gamemetrics.pdf}}
-\caption{Player metrics hierarchical diagram, Drachen et al. \textit{Game~Analytics - The Basics}~\citep{Drachen:2013Basics}. }
+\caption{Player metrics hierarchical diagram. Figure taken from Drachen et al. \textit{Game~Analytics - The Basics}~\citep{Drachen:2013Basics} and modified accordingly. }
 \label{fig:gamemetrics}
 \end{figure}
 There are huge amount of player behavior measures that are being logged each second in a complex game like MMORPG~\citep{Kim:2008Tracking, Drachen:2011Evaluating}, e.g. location of player, current health, stamina, status on weapons and a many more attributes that could describe a user state in a game also state/reactions of objects and monsters affected by the user. Its clear that this can generate a lot of information and game analysts face the problem of selecting the most essential pieces of information to analyze, imposing a bias but is necessary to avoid information overload~\citep{Drachen:2013Basics}. 
@@ -124,25 +124,25 @@ SIVM is a Archetype Analysis (AA) approximation algorithm for large-scale data a
 \item Able to translate the findings to game developers, a knowledge that is actionable.
 \end{itemize}
 
-K-means algorithm has been shown to be very useful in behavioral analysis to obtain useful insights into in the general behaviors found in games, where AA like the SIVM algorithm can extract behavior player profiles based on the different distances to each of the extreme behaviors~\citep{Drachen:2013}. When choosing features for behavioral cluster analysis, Drachen et al.~\citep{Drachen:2009TGA, Drachen:2012} suggests that one should focus on features related to the core game mechanics and playtime. Interpreting basis vectors found by SIVM and k-means are illustrated in Figure~\ref{fig:sivmbasis} and Figure~\ref{fig:kmeansbasis}, where in a very recent study of Drachen et al.~\citep{Drachen:2013}, authors selected playtime and leveling speed as behavioral variables showing five leveling behaviors they found in the popular MMORPG game World of Warcraft. Each basis vector is a 2.555 dimensional vector where each entry represents the level of the player each day in the last 6 years.\\
+K-means algorithm has been shown to be very useful in behavioral analysis to obtain useful insights into in the general behaviors found in games, where AA like the SIVM algorithm can extract behavior player profiles based on the different distances to each of the extreme behaviors~\citep{Drachen:2013}. When choosing features for behavioral cluster analysis, Drachen et al.~\citep{Drachen:2009TGA, Drachen:2012} suggests that one should focus on features related to the core game mechanics and playtime. Interpreting basis vectors found by SIVM and k-means are illustrated in Figure~\ref{fig:sivmbasis} and Figure~\ref{fig:kmeansbasis}, taken from a very recent study by Drachen et al.~\citep{Drachen:2013}, authors selected playtime and leveling speed as behavioral variables showing five leveling behaviors they found in the popular MMORPG game World of Warcraft. Each basis vector is a 2.555 dimensional vector where each entry represents the level of the player each day in the last 6 years.\\
 
 
 \begin{figure}[here]
 \centerline{\includegraphics[width=0.9\textwidth]{Figures/sivmbasis.png}}
-\caption{Five SIVM basis vectors showing extreme leveling behaviors for Archetype Analysis. Each basis vector is an actual player and is a legal playing behavior thus very easy to interpret ~\citep{Drachen:2013}.}
+\caption{Five SIVM basis vectors showing extreme leveling behaviors for Archetype Analysis. Each basis vector is an actual player and is a legal playing behavior thus very easy to interpret. This figure is from~\citep{Drachen:2013}.}
 \label{fig:sivmbasis}
 \end{figure}
 
 
 \begin{figure}[here]
 \centerline{\includegraphics[width=0.9\textwidth]{Figures/kmeansbasis.png}}
-\caption{K-means five cluster centroids showing average leveling behaviors representing each cluster of players. They give good idea about leveling behavior of many players but some of them are also very similar, interpretion is not straightforward~\citep{Drachen:2013}. }
+\caption{K-means five cluster centroids showing average leveling behaviors representing each cluster of players. They give good idea about leveling behavior of many players but some of them are also very similar, interpretion is not straightforward. This figure is from~\citep{Drachen:2013}. }
 \label{fig:kmeansbasis}
 \end{figure}
 
 
 \section{MapReduce and Large-Scale Data}
-MapReduce is a programming model introduced by Google in 2004 \citep{Dean:2004}, built on the divide-and-conquer paradigm, dividing a large-scale data into smaller chunks and process them in parallel. MapReduce enables fault-tolerant distributed computing on large-scale datasets and is a new way to interact with \textit{Big Data} where as old techniques are more complicated, costly and time consuming \citep{Dean:2004, schneider2012Hadoop}. Google also introduced along with MapReduce a powerful distributed file system called \textit{Google File System} (GFS) that could hold massive amount of data. This led to a new open source software framework called Hadoop \citep{bialecki2005hadoop}, written in Java and is now maintained by Apache Foundation, a end-to-end solution for organizations that want to apply MapReduce. There are many Hadoop-related projects at Apache including the popular scalable machine learning and data mining library called Mahout, written also in Java. 
+MapReduce is a programming model introduced by Google in 2004 \citep{Dean:2004}, built on the divide-and-conquer paradigm, dividing a large-scale data into smaller chunks and process them in parallel. MapReduce enables fault-tolerant distributed computing on large-scale datasets and is a new way to interact with \textit{Big Data} where as old techniques are more complicated, costly and time consuming \citep{Dean:2004, schneider2012Hadoop}. Google also introduced along with MapReduce a powerful distributed file system called \textit{Google File System} (GFS) that could hold massive amount of data. This led to a new open source software framework called Hadoop \citep{bialecki2005hadoop}, written in Java and is now maintained by Apache Foundation~\footnote{http://www.apache.org/}, a end-to-end solution for organizations that want to apply MapReduce. There are many Hadoop-related projects at Apache including the popular scalable machine learning and data mining library called Mahout, written also in Java. 
 
 Hadoop builds on the MapReduce and GFS foundation, designed to abstract away much of the complexity of distributed processing running on large clusters of commodity computers. The MapReduce programming model allows developers to write parallel distributed programs very easily by only implementing two functions called \textit{Map} and \textit{Reduce}. Developers don't need to worry about doing a complicated code to e.g. distribute work to computers, internal communication, data transfers and dealing with fault tolerance. Instead they can focus on the logic to solve the problem at a hand.
 
