@@ -32,7 +32,7 @@ A sub-category of player metrics called \textit{gameplay metrics}, measures of a
 
 Gameplay metrics are however the most important player metric when evaluating player experience, game designs and quality assurance~\citep{Kim:2008Tracking, Drachen:2012, Drachen:2011Evaluating}, but are generally in low priority compared to the customer metrics~\citep{Drachen:2013Basics}.
 \begin{figure}[here]
-\centerline{\includegraphics[width=0.9\textwidth]{Figures/Hierarchical_diagram_gamemetrics.pdf}}
+\centerline{\includegraphics[width=0.7\textwidth]{Figures/Hierarchical_diagram_gamemetrics.pdf}}
 \caption{Player metrics hierarchical diagram. Figure taken from Drachen et al. \textit{Game~Analytics - The Basics}~\citep{Drachen:2013Basics} and modified accordingly. }
 \label{fig:gamemetrics}
 \end{figure}
@@ -49,22 +49,23 @@ The goal of clustering is to categories or groups similar objects (players, item
 In this thesis we focus on a popular clustering algorithm called k-means that is a centroid based clustering algorithm where a cluster prototype is represented by a central vector containing average value of all the objects in a cluster, e.g. describing the average behavior.
 
 \subsection{K-means clustering method}
-Many clustering methods exists but one of the most popular ones is called \textit{k-means}~\citep{FORGYE.W.:1965,MacQueen:1967KMeans}, also known as the Lloyd algorithm~\citep{Lloyd:1982} which was further generalized for vector quantization~\citep{Linde:1980VQ,Gersho:1991VQS,Xu:2009Clu}. K-means seeks to group similar data points into \textit{k} partitions or hyperspherical clusters giving insights into the general distributions in the dataset. A cluster is represented by a centroid that characterize the geometric center of the cluster that is calculated as the mean of all data instances belonging to that cluster. The objective function in k-means is to minimizes the squared error between a cluster's centroid (mean) and its assigned points and over all set of clusters minimizing the Sum of Squared Error (SSE). Let a set of data points $x_i \in \Re^d, i=1,...,N$, where each point $x$ is a real number $d$-dimensional vector and we want to partition them into \textit{K} clusters $C=\{c_1,...,c_K\} \in \Re^d$, then the objective function is defined as
+\label{subsec:kmeansclustering}
+Many clustering methods exists but one of the most popular ones is called \textit{k-means}~\citep{FORGYE.W.:1965,MacQueen:1967KMeans}, also known as the Lloyd algorithm~\citep{Lloyd:1982} which was further generalized for vector quantization~\citep{Linde:1980VQ,Gersho:1991VQS,Xu:2009Clu}. K-means seeks to group similar data points into \textit{k} partitions or hyperspherical clusters giving insights into the general distributions in the dataset. A cluster is represented by a centroid that characterize the geometric center of the cluster that is calculated as the mean of all data instances belonging to that cluster. The objective function in k-means is to minimizes the squared error between a cluster's centroid (mean) and its assigned points and over all set of clusters minimizing the \textit{Sum of Squared Error} (SSE) also called the \textit{within-cluster variation}. Let a set of data points $x_i \in \Re^d, i=1,...,N$, where each point $x$ is a real number $d$-dimensional vector and we want to partition them into \textit{K} clusters $C=\{c_1,...,c_K\} \in \Re^d$, then the objective function is defined as
 
 \begin{center}
-$SSE =\displaystyle \sum_{k=1}^{K}\displaystyle \sum_{x_i \in c_k}\left \| x_i-\mu_k \right \|^2$ 
+$SSE =\displaystyle \sum_{k=1}^{K}\displaystyle \sum_{x_i \in c_k}dist(x_i,\mu_k)^2$ 
 \end{center}
 
-where $\mu_k$ is the mean vector for the cluster centroid $k$ and $\left \| x_i-\mu_k \right \|$ is a Euclidean distance measure between two points the data vector $x_i$ and the mean vector $\mu_k$, calculated respectively
+where $\mu_k$ is the mean vector for the cluster centroid $k$ and $dist(x_i,\mu_k)$ is a Euclidean distance measure between two points the data vector $x_i$ and the mean vector $\mu_k$. The mean vector $\mu_k$ is defined as
 
 \begin{center}
 $\mu_k = \dfrac{1}{N_k}\displaystyle \sum_{x_i \in c_k}x_i,$ 
 \end{center}
 
-where $c_k$ is a cluster number $k$ and its $N_k$ data points $i=1,...,N_k$. The Euclidean distance function is defined as
+where $c_k$ is a cluster number $k$ and its $N_k$ data points $i=1,...,N_k$. The Euclidean distance is the most popular distance measure for numeric attributes, also known as the \textit{Minkowski distance}~\footnote{$http://en.wikipedia.org/wiki/Minkowski\_distance/$} a more generalized version when we have $L_2$ norm, the Euclidean distance function is defined as
 
 \begin{center}
-$\left \| x_i-y_i \right \| = \sqrt{\displaystyle \sum_{i=1}^{d}(x_i-y_i)^2} $
+$dist(x,y) = \sqrt{\displaystyle \sum_{i=1}^{d}(x_i-y_i)^2} $
 \end{center}
 
 When running the k-means algorithm it starts by initializing $K$ centroids by choosing random data points from the dataset or according some heuristic procedure. In each iteration of the algorithm it assigns data points to it's nearest centroid by calculating the minimum Euclidean distance to the $K$ centroids for each instance. After assigning all the data points to clusters the centroids are updated so they represent the mean value of all the points in the corresponding cluster. The algorithm stops the iteration when the centroids do not change from the previous iteration or the error (SSE) is below some specific threshold. Also possible to manually define a maximum number of iterations to be run. Algorithm~\ref{alg:km} shows a pseudo-code of k-means. The algorithm can be seen as a gradient descent procedure which iteratively updates its initial cluster centers so as to decrease its error function.
@@ -128,20 +129,21 @@ K-means algorithm has been shown to be very useful in behavioral analysis to obt
 
 
 \begin{figure}[here]
-\centerline{\includegraphics[width=0.9\textwidth]{Figures/sivmbasis.png}}
+\centerline{\includegraphics[width=1.0\textwidth]{Figures/sivmbasis.png}}
 \caption{Five SIVM basis vectors showing extreme leveling behaviors for Archetype Analysis. Each basis vector is an actual player and is a legal playing behavior thus very easy to interpret. This figure is from~\citep{Drachen:2013}.}
 \label{fig:sivmbasis}
 \end{figure}
 
 
 \begin{figure}[here]
-\centerline{\includegraphics[width=0.9\textwidth]{Figures/kmeansbasis.png}}
+\centerline{\includegraphics[width=1.0\textwidth]{Figures/kmeansbasis.png}}
 \caption{K-means five cluster centroids showing average leveling behaviors representing each cluster of players. They give good idea about leveling behavior of many players but some of them are also very similar, interpretion is not straightforward. This figure is from~\citep{Drachen:2013}. }
 \label{fig:kmeansbasis}
 \end{figure}
 
 
 \section{MapReduce and Large-Scale Data}
+\label{sec:MRLargeData}
 MapReduce is a programming model introduced by Google in 2004 \citep{Dean:2004}, built on the divide-and-conquer paradigm, dividing a large-scale data into smaller chunks and process them in parallel. MapReduce enables fault-tolerant distributed computing on large-scale datasets and is a new way to interact with \textit{Big Data} where as old techniques are more complicated, costly and time consuming \citep{Dean:2004, schneider2012Hadoop}. Google also introduced along with MapReduce a powerful distributed file system called \textit{Google File System} (GFS) that could hold massive amount of data. This led to a new open source software framework called Hadoop \citep{bialecki2005hadoop}, written in Java and is now maintained by Apache Foundation~\footnote{http://www.apache.org/}, a end-to-end solution for organizations that want to apply MapReduce. There are many Hadoop-related projects at Apache including the popular scalable machine learning and data mining library called Mahout, written also in Java. 
 
 Hadoop builds on the MapReduce and GFS foundation, designed to abstract away much of the complexity of distributed processing running on large clusters of commodity computers. The MapReduce programming model allows developers to write parallel distributed programs very easily by only implementing two functions called \textit{Map} and \textit{Reduce}. Developers don't need to worry about doing a complicated code to e.g. distribute work to computers, internal communication, data transfers and dealing with fault tolerance. Instead they can focus on the logic to solve the problem at a hand.
@@ -205,7 +207,7 @@ When a user program calls the MapReduce program the following sequence of occurs
 
 Each Map task is assigned one or more chunks of the input data and executes the Map function code written by the user. The Map task output is stored on a local disk in $R$ partitions, the master then notifies the Reduce task about the intermediate data. The Reduce task reads the data and sorts it by the intermediate keys, grouping all occurrences of the same key together. For each unique intermediate key encountered it passes the key and the corresponding occurrences to the Reduce function written by the user. Figure~\ref{fig:mapreduce} illustrates the execution flow that we just described, for more details one can look at work of Dean and Ghemawat ~\citep{Dean:2004} and Rajaraman and Ullman ~\citep{Rajaraman:2011MMD}.
 \begin{figure}[here]
-\centerline{\includegraphics[width=0.9\textwidth]{Figures/MapReduceexecutionflow.pdf}}
+\centerline{\includegraphics[width=1.0\textwidth]{Figures/MapReduceexecutionflow.pdf}}
 \caption{Overview of the MapReduce execution flow}
 \label{fig:mapreduce}
 \end{figure}

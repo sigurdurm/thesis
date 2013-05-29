@@ -52,7 +52,7 @@ For this thesis we tried to keep the number of game features in minimal and deci
 \item Premium Spending: Number of times this player spends a in-game money on virtual items or resources ($\mu = 1.1, \sigma = 2.7$) 
 \end{itemize}
 
-The five number summary of the skewed distribution is in Table~\ref{tab:FiveSummaryLoginsBattlesPremium}. Boxplots visualizing the distributions for these events are shown in relevant figures below, Logins in Figure~\ref{fig:boxplot_logins}, Battles in Figure~\ref{fig:boxplot_battles} and Premium spent events in Figure~\ref{fig:boxplot_premium}.
+We tried to chose features that could describe player engagement to the game. How active the player is exploring various areas, fighting battles and spending in-game money to advance in the game quicker. The five number summary of the skewed distribution is in Table~\ref{tab:FiveSummaryLoginsBattlesPremium}. Boxplots visualizing the distributions for these events are shown in relevant figures below, Logins in Figure~\ref{fig:boxplot_logins}, Battles in Figure~\ref{fig:boxplot_battles} and Premium spent events in Figure~\ref{fig:boxplot_premium}.
 
 
 \begin{table}[h]
@@ -152,63 +152,198 @@ Removing the outliers from the whole dataset, using the ZMN method described abo
 
 
 \section{K-means algorithm in MapReduce}
-\textit{TODO Describe the k-means algorithm implementation in MapReduce and the relevant pseudo codes and pictures}
+A k-means algorithm was implemented in MapReduce (MR) that is able to incrementally process large-scale datasets in parallel when running on e.g. Amazon EMR. We implemented two versions of MR k-means that use different MR execution flows. We first started to implement a naive and a common implementation version of MR k-means that assigns each point (feature vector) to a nearest cluster in the \textit{Map} phase and updates the centroids for the clusters in the \textit{Reduce} phase. The programmer only needs to fill in two functions, the Map and Reduce. The other version has a \textit{Combiner} phase implemented that performs a reduce work on the same computer node as the Mapper, by calculating intermediate sums of all the points for each cluster from a Map function. This minimizes the data needed to be transferred and shuffled by the MR framework to the Reducer, sending only an intermediate sum with each centroid from each mapper instead of list of all data points belonging to each cluster \citep{Dean:2004}. The second implementation using a Combiner is used in the experiments (with some efficiency adjustments) where we cluster the real game data, since it is a more efficient and scalable when processing larger amount of data as explained in Section~\ref{sec:MRLargeData} and Section~\ref{sec:MapCombineReduceVersion} and as result show from experiments in Chapter~\ref{Chapter5}.
+
+In the next two subsections we will describe the two implementations and their pseudo codes. Then we will explain the \textit{Incremental MRK-means Program} that controls the incremental data batch processing by executing $n$ iterations of the MRK-means job. The most computational expensive part in k-means is to find the nearest centroid for a given feature vector by calculating the distance between the two. We implemented three different distance calculation versions to find the most efficient one when running on a cluster setup using Amazon EMR. In the last subsection  we give a quick overview of the development environment and tools that were used in this thesis.
+
+\subsection{K-means version 1 - Map and Reduce}
+Implementing the Map and a Reduce function version is the most common implementation of k-means in MR. Where The Map function calculates the nearest centroids to each data point and emits that pair to the Reduce function that sums up all data point values for each centroid and outputs updated centroids. Our Map function is called for each player feature vector found in the data batch and we iterate through all centroids that we have in memory to calculate the distance to the nearest one. The nearest centroid and its data feature vector is emitted from all the Map tasks running in parallel to the MR framework that shuffles and sorts all feature vectors together belonging to the same centroid. The pseudo-code for the Map function can be found in Algorithm~\ref{alg:mapkmeansv1} and for Reduce in Algorithm~\ref{alg:reducekmeansv1}.
+
+\algsetup{indent=2em}
+\begin{center}
+\newcommand{\map}{\ensuremath{\mbox{\sc Kmeans version 1: Map}}}
+\begin{algorithm}[h!]
+\caption{$\map(key,value)$}\label{alg:mapkmeansv1}
+\begin{algorithmic}[1]
+\REQUIRE $key = document\_name$, $value = feature\_vector$
+\ENSURE $key = centroid\_id$, $value = feature\_vector$.
+\STATE $current\_centroids \leftarrow C = \{c_1...c_k\}$ \COMMENT{loaded into memory}
+\STATE $feature\_vector \leftarrow = value$
+\medskip
+\STATE  $mindist \leftarrow +\infty$
+\STATE $minCentroid \leftarrow None$
+\FORALL{$centroid \in  current\_centroids$} 
+	\STATE $distance \leftarrow getDistance(feature\_vector, centroid) $
+	\IF{$distance < mindist$ \OR $minCentroid = None$} 
+		\STATE $mindist \leftarrow distance$
+		\STATE $minCentroid \leftarrow centroid$ \COMMENT{nearest centroid}
+	\ENDIF
+\ENDFOR
+\medskip
+\STATE{$EmitIntermediate(minCentroid, feature\_vector)$}
+\end{algorithmic}
+\end{algorithm}
+\end{center}
+
+\begin{center}
+\newcommand{\map}{\ensuremath{\mbox{\sc Kmeans version 1: Reduce}}}
+\begin{algorithm}[h!]
+\caption{$\map(key,value)$}\label{alg:reducekmeansv1}
+\begin{algorithmic}[1]
+\REQUIRE $key = centroid\_id$, $values = feature\_vector\_list$
+\ENSURE $key = centroid\_id$, $value = average\_feature\_vector$.
+\STATE $feature\_vector\_list \leftarrow values$
+\medskip
+\STATE $sum\_feature\_vector \leftarrow [0, 0, 0]$
+\FORALL{$feature\_vector \in  feature\_vector\_list$} 
+	\STATE $sum\_feature\_vector \leftarrow sum\_feature\_vector + feature\_vector$
+\ENDFOR
+\medskip
+\STATE $count\_feature\_vectors \leftarrow getCount(feature\_vector\_list)$
+\STATE $average\_feature\_vector \leftarrow sum\_feature\_vector \div count\_feature\_vectors$
+\medskip
+\STATE{$EmitIntermediate(key, average\_feature\_vector)$}
+\end{algorithmic}
+\end{algorithm}
+\end{center}
+
+The Reduce function then gets one input per centroid and all its feature vectors. Iterating through all the feature vectors, summing up their values and divide with their count to get a new updated centroid and outputs that centroid or the mean that represents the average feature vector for the cluster population.
 
 
-A k-means algorithm was implemented in MapReduce that is able to process large-scale datasets. We started to implement a simple version of k-means that assigns each point to a nearest cluster in the \textit{Map} function and calculates the new centroid in the \textit{Reduce} phase. Next version had a \textit{Combiner} implemented that performs a reduce work on the same computer node as the Mapper, by calculating intermediate sums of all points for each cluster from a Map function. This minimizes the data needed to be transferred and shuffled by the MapReduce framework to the Reducer, only sending an intermediate sum with each cluster centroid from each mapper instead of list of all points in each cluster [REFERENCE]. The final k-means version uses a more efficient way of calculating the distance to the nearest centroid for each point. Using a matrix calculation that returns a distance matrix that represents distances from all points to all centroids. These different versions are compared below in respect to time and space complexity.
+\subsection{K-means version 2 - Map, Combiner and Reduce}
+\label{sec:MapCombineReduceVersion}
+By adding the Combiner phase in between the Map and Reduce phase can reduce a large amount of overhead in data transfer and computation in the MapReduce framework. The Combiner phase is executed on the same computer as the Map phase and is thought as a reduce phase inside the Map phase. The Combiner function takes input directly from the Map function and calculates intermediate results that is emitted over the network instead of Map emitting a key and value pair for each feature vector, which can be problematic for large datasets.
+
+\begin{center}
+\newcommand{\map}{\ensuremath{\mbox{\sc Kmeans version 2: Combine}}}
+\begin{algorithm}[h!]
+\caption{$\map(key,value)$}\label{alg:combinekmeansv2}
+\begin{algorithmic}[1]
+\REQUIRE $key = centroid\_id$, $values = feature\_vector\_list$
+\ENSURE $key = centroid\_id$, $value = [sum\_feature\_vector$, $count\_feature\_vectors])$.
+\STATE $feature\_vector\_list \leftarrow values$
+\medskip
+\STATE $sum\_feature\_vector \leftarrow [0, 0, 0]$
+\FORALL{$feature\_vector \in  feature\_vector\_list$} 
+	\STATE $sum\_feature\_vector \leftarrow sum\_feature\_vector + feature\_vector$
+\ENDFOR
+\medskip
+\STATE $count\_feature\_vectors \leftarrow getCount(feature\_vector\_list)$
+\medskip
+\STATE{$EmitIntermediate(key, [sum\_feature\_vector$, $count\_feature\_vectors])$}
+\end{algorithmic}
+\end{algorithm}
+\end{center}
+
+In this version we use the same Map function as described above in Algorithm~\ref{alg:mapkmeansv1} but we need to change the Reducer. The Combiner function however becomes very similar to the old Reducer in Algorithm~\ref{alg:reducekmeansv1}. The only difference being that the Combiner doesn't compute the average feature vector or the mean and emits little more complex key and value pair, where $key = centroid\_id$ and $value = [sum\_feature\_vector$,~$count\_feature\_vectors]$, see pseudo-code in Algorithm~\ref{alg:combinekmeansv2}. 
+\begin{center}
+\newcommand{\map}{\ensuremath{\mbox{\sc Kmeans version 2: Reduce}}}
+\begin{algorithm}[h!]
+\caption{$\map(key,value)$}\label{alg:reducekmeansv2}
+\begin{algorithmic}[1]
+\REQUIRE $key = centroid\_id$, $values = [sum\_feature\_vector$, $count\_feature\_vectors])$
+\ENSURE $key = centroid\_id$, $value = average\_feature\_vector$.
+\STATE $sum\_and\_count\_list \leftarrow values$
+\medskip
+\STATE $sum\_total\_feature\_vector \leftarrow [0, 0, 0]$
+\STATE $count\_total \leftarrow 0$
+\FORALL{$sum\_and\_count \in  sum\_and\_count\_list$} 
+	\STATE $sum\_vector \leftarrow getSumVector(sum\_and\_count)$
+	\STATE $count \leftarrow getCount(sum\_and\_count)$
+	\STATE $sum\_total\_feature\_vector \leftarrow sum\_total\_feature\_vector + sum\_vector$
+	\STATE $count\_total \leftarrow count\_total + count$
+\ENDFOR
+\medskip
+\STATE $average\_feature\_vector \leftarrow sum\_total\_feature\_vector \div count\_total$
+\medskip
+\STATE{$EmitIntermediate(key$, $average\_feature\_vector)$}
+\end{algorithmic}
+\end{algorithm}
+\end{center}
+
+The new Reducer algorithm then sums up the intermediate sums and counts from the Combiners and calculates the average feature vector. The reducer works with much smaller data as it receives a sum of values per centroid in stead of a long list of feature vectors, this is of great help when working with large data, see the Reducer pseudo-code in Algorithm~\ref{alg:reducekmeansv2}. We will also discuss the Combiner vs. non-Combiner better in the results in Chapter~\ref{Chapter5}.
 
 
-\subsection{K-means - Map and Reduce version}
-\lipsum[1]
+\subsection{Computing Efficiently}
+The final k-means version uses a more efficient way of calculating the distance to the nearest centroid for each point. Using a matrix calculation that returns a distance matrix that represents distances from all points to all centroids. These different versions are compared below in respect to time and space complexity.
 
-\subsubsection{Map}
-\textit{TODO Describe the map function}
+When calculating the distance between two points or vectors we calculate the Euclidean distance between them. The most computational expensive work in k-means is when we need to find the nearest centroid for a point, that is the centroid that has the minimum Euclidean distance. The naive version when calculating the distance in k-mean is to calculate the distance to each of the centroids one at a time by iterating over all the features or attributes in the vector and summing up their squared error. As in shown earlier in Subsection~\ref{subsec:kmeansclustering}, the Euclidean distance is defined as follows
 
-\lipsum[1-2]
+\begin{center}
+$dist(x,y) = \sqrt{\displaystyle \sum_{i=1}^{d}(x_i-y_i)^2} $.
+\end{center}
 
+Trying to make these calculations more efficient we implemented two other versions how we calculate the Euclidean distance. First we used \textit{vectorized} approaches found in the Python library called NumPy. By grouping simple element-wise numerical operations together to perform much more efficiently on arrays. The NumPy operations are implemented in the \textit{C} programming language, giving them very high speed improvement. When applying vectorisation we don't have to have a \textit{for loop} that iterates through all centroids, we simply calculate the distances to all centroids in one command by passing to the method the feature vector and array or a matrix of centroid vectors. The larger the data is and more centroids we have the slower the naive solution will be perform but vectorisation is a safe bet. 
 
-\subsubsection{Reduce}
-\textit{TODO Describe the Reduce function}
+The second version we implemented was also using array operations but doing things a bit differently. The idea is to have all the data and the centroids in memory then call one operation to get the similarity or dissimilarity matrix for all the data points to all the centroids, easily to identify what is the nearest centroid (with the minimum distance) for all data points in one operation. This method performed amazingly fast when we implemented it and executed it locally without the MapReduce version. 
 
-\lipsum[7-8]
+Implementing it in MapReduce we needed to use the Map function to gather one point at a time and store in an array in memory. Then we implement a function that is called by the framework directly after the Map function finishes and before the Combine function. In that function called \textit{Map Final} we calculate the distance matrix between all the data points and the centroids in memory, emitting each centroid and its nearest points. Then the Combine function will be called and sums up all the values for each centroid as described before. 
 
-\subsection{K-means - Map, Combine and Reduce version}
-\lipsum[1]
+However there is a problem with this solution that it needs to hold everything in memory and whereas the Map phase in MapReduce framework is designed to process one point at time and solve the computational problem for large data in parallel, e.g. splitting the data and run on hundreds or thousands of computers.
 
-\subsubsection{Combine}
-\textit{TODO Describe the Combine function}
+We had problems running this implemention on larger data sets when performing experiments on a cluster in the Amazon EMR framwork, we had a memory fail in the Mapper. Thus the first vectorisation approach mentioned in above was used in our experiments. For comparison results between these versions see our scalability results in Chapter~\ref{Chapter5}. 
 
-\lipsum[5-6]
-
-\subsection{K-means - Efficient version}
-\lipsum[1]
-
-\subsubsection{Map}
-\textit{TODO Describe the map function}
-
-\lipsum[1-2]
-
-\subsubsection{Combine}
-\textit{TODO Describe the Combine function}
-
-\lipsum[5-6]
+Analyzing the memory complexity for the both of the efficient versions we implemented. For our second version when calculating the Euclidean distance by storing everything in memory would be first need to store the data point vectors in memory from the Map phase with memory complexity $O(\dfrac{N \times d}{s})$ where $s$ is the number of splits/Mappers, $N$ is number of data points and $d$ is the dimensionality. Next we generate the distance matrix that costs $O(\dfrac{N \times k}{s})$ and storing the nearest centroids for each point $O(\dfrac{N}{s})$, next we create boolean arrays to extract the set of points for each $k$ that we want to emit to the reducers, approx. $O(\dfrac{N \times k}{s})$. Putting this together we would need at least $O(\dfrac{N \times d}{s} + \dfrac{N \times k}{s})$ memory, compared to the first vectorisation method we would need about $O(d)$ for the incoming data point and $O(k)$ for the distances to the centroids with total memory complexity of $O(d + k)$.
 
 
-\subsubsection{Reduce}
-\textit{TODO Describe the Reduce function}
+\section{Incremental MRK-means Program}
+This program controls the incremental MR k-means data batch processing execution flow. It executes on a data batch basis, when a data batch is ready to be processed then this program is called and it returns the current intermediate means found. When the next data batch is ready the program is executed and expects to receive the previous found intermediate means as initial means for the current incoming data batch. The program expects following inputs:
+\begin{itemize}
+\item $input\_file$: Path to data batch file (can also be an Amazon S3 URI). The file is read by the MapReduce framework, split and distribute the data batch to the Mappers.
+\item $initial\_means$: Path to a means file. If running the program for the first time then these means must be selected from the data batch. Else this is the intermediate means output from the previous data batch processing.
+\item $k\_means$: Number of centroids that we want to find in the data batch.
+\item $max\_iterations$: The number of iterations to run k-means on the data batch.
+\item $threshold\_delta$: A value that defines the minimum centroids difference/movement found between iterations. (e.g. $0.01$)
+\end{itemize}
 
-\lipsum[7-8]
+If setting the maximum iterations for a data batch too high then there is a risk of k-means adjusting the intermediate means to close to the distribution of the current data batch and can be costly when they are used as input to the next data batch that has a slightly different distribution. See Algorithm~\ref{alg:mrkmeansprogram} for the pseudo-code of the program.
 
 
-\subsection{Distance measure}
-\textit{TODO Describe the distance measure used in k-means}
+\begin{center}
+\newcommand{\map}{\ensuremath{\mbox{\sc IncrementalMapReduceKmeans}}}
+\begin{algorithm}[h!]
+\caption{$\map()$}\label{alg:mrkmeansprogram}
+\begin{algorithmic}[1]
+\REQUIRE $input\_file$, $initial\_means$, $k\_means$, $max\_iterations$, $threshold\_delta$
+\ENSURE $means$
+\medskip
+\STATE $intermediate\_means \leftarrow initial\_means$
+\FOR {$i$ \TO $max\_iterations$}
+	\STATE $MRjob\_parameters \leftarrow [input\_file, intermediate\_means, k\_means]$
+	\STATE $output \leftarrow run MRJob(MRjob\_parameters)$
+	\STATE $means \leftarrow getMeans(output)$
+	\medskip
+	\STATE $means\_difference \leftarrow dist(intermediate\_means - means)$
+	\IF {$means\_difference < threshold\_delta$}
+		\RETURN $means$
+	\ELSE
+		\STATE $intermediate\_means \leftarrow means$
+	\ENDIF
+\ENDFOR
+\medskip
+\RETURN $intermediate\_means$
+\end{algorithmic}
+\end{algorithm}
+\end{center}
 
-\lipsum[1]
+
+The main steps in the execution flow for the incremental MR k-means process, see Figure~\ref{fig:mrkmeansprocess}, are described as following:
+\begin{itemize}
+\item 1. Input: Means or centroids found from previous data batch processing iteration and the current batch of data to be processed.
+\item 2. MR k-means: Run $n$-iterations of MR k-means job. In each iteration; The Map/Combine phase assigns data points to nearest means, the Reduce phase updates the means of the assigned points. If more than $1$-iteration is performed then the intermediate means from the previous iteration is used as input to the MR k-means job.
+\item 3. Output: After $n$-iterations the program outputs the means found for the current data batch.
+\item 4. Process: If there is multiple data batches to be processed then the program is run again with means from step 3. as input and the next data batch file.
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1.0\textwidth]{Figures/IncrementalMRKmeansExecutionProcess.pdf}
+\caption{The incremental MR k-means execution flow.}
+\label{fig:mrkmeansprocess}
+\end{figure}
 
 
-\section{MapReduce Development Environment}
-\textit{TODO Describe the set-up for the experiments}
-The MapReduce k-means algorithm was implemented using a framework called \textit{mrjob}~\footnote{http://pythonhosted.org/mrjob/}. Mrjob is a open-source Python framework actively maintained by Yelp~\footnote{http://opensource.yelp.com/}, that allows MapReduce jobs to be written in Python 2.5+ and executed on several platforms. Using mrjob allows for rapid implementation of MapReduce jobs by running them locally for development purposes and easily run them on your own Hadoop cluster or using the Amazon Elastic MapReduce (Amazon EMR)\footnote{http://aws.amazon.com/elasticmapreduce/}. Amazon EMR is a web service that allows developers to buy time on a Hadoop cluster to process large-scale data easily and cost-effectively.
+\section{Development Environment and Tools}
+The MapReduce k-means algorithm was implemented using a MR development framework called \textit{mrjob}~\footnote{http://pythonhosted.org/mrjob/}. Mrjob is a open-source Python framework actively maintained by Yelp~\footnote{http://opensource.yelp.com/}, that allows MapReduce jobs to be written in Python 2.5+ and executed on several platforms. Using mrjob allows for rapid implementation of MapReduce jobs by running them locally for development purposes and easily run them on your own Hadoop cluster or even easier using the Amazon Elastic MapReduce (Amazon EMR)\footnote{http://aws.amazon.com/elasticmapreduce/}. Amazon EMR is a web service that allows developers to buy time on a Hadoop cluster to process large-scale data easily and cost-effectively. For the experiments in this thesis we ran our MR k-means algorithm on Amazon EMR web service for scalability tests.
 
-The Python programming language was chosen for this study because GameAnalytics (GA) also uses Python and mrjob to implement their MapReduce jobs. Allowing GA easily to use and build further on the implementation from this study. 
-\lipsum[1-3]
+The Python programming language was chosen for this study because GameAnalytics (GA) also uses Python and mrjob to implement their MapReduce jobs. Allowing GA easily to use and build further on the implementation from this study. In this thesis we used the NumPy/SciPy Python library that enables vectorisation approaches and array/matrix data structures for easier and more efficient data vector manipulations. The implementation of algorithms and running experiments were executed on a Linux operating system, recommended by GA instead of using a Windows OS, because of Python libraries compatibility and mrjob.
