@@ -1,9 +1,11 @@
-\contentsline {algorithm}{\numberline {2.1}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc K-means}}(S,K)$\relax }}{11}{algorithm.25}
-\contentsline {algorithm}{\numberline {2.2}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Map}}(key,value)$\relax }}{16}{algorithm.38}
-\contentsline {algorithm}{\numberline {2.3}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Reduce}}(key,values)$\relax }}{16}{algorithm.42}
-\contentsline {algorithm}{\numberline {2.4}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Combine}}(key,values)$\relax }}{17}{algorithm.48}
-\contentsline {algorithm}{\numberline {4.1}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Kmeans version 1: Map}}(key,value)$\relax }}{33}{algorithm.75}
-\contentsline {algorithm}{\numberline {4.2}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Kmeans version 1: Reduce}}(key,value)$\relax }}{33}{algorithm.88}
-\contentsline {algorithm}{\numberline {4.3}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Kmeans version 2: Combine}}(key,value)$\relax }}{34}{algorithm.98}
-\contentsline {algorithm}{\numberline {4.4}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Kmeans version 2: Reduce}}(key,value)$\relax }}{35}{algorithm.106}
-\contentsline {algorithm}{\numberline {4.5}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc IncrementalMapReduceKmeans}}()$\relax }}{38}{algorithm.120}
+\contentsline {algorithm}{\numberline {2.1}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc K-means}}(S,K)$\relax }}{12}{algorithm.25}
+\contentsline {algorithm}{\numberline {2.2}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Map}}(key,value)$\relax }}{17}{algorithm.38}
+\contentsline {algorithm}{\numberline {2.3}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Reduce}}(key,values)$\relax }}{17}{algorithm.42}
+\contentsline {algorithm}{\numberline {2.4}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Combine}}(key,values)$\relax }}{18}{algorithm.48}
+\contentsline {algorithm}{\numberline {4.1}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc K-means First Version: Mapper}}(key,value)$\relax }}{35}{algorithm.77}
+\contentsline {algorithm}{\numberline {4.2}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc K-means First Version: Reducer}}(key,values)$\relax }}{35}{algorithm.82}
+\contentsline {algorithm}{\numberline {4.3}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc getNearestCentroid}}(point, centroids)$\relax }}{35}{algorithm.91}
+\contentsline {algorithm}{\numberline {4.4}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc K-means Second Version: Combiner}}(key,values)$\relax }}{36}{algorithm.107}
+\contentsline {algorithm}{\numberline {4.5}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc K-means Second Version: Reducer}}(key,values)$\relax }}{37}{algorithm.115}
+\contentsline {algorithm}{\numberline {4.6}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc Final Version: getNearestCentroid}}(point, centroids)$\relax }}{38}{algorithm.132}
+\contentsline {algorithm}{\numberline {4.7}{\ignorespaces $\ensuremath {\unhbox \voidb@x \hbox {\sc MapReduce Kmeans Program}}()$\relax }}{41}{algorithm.150}

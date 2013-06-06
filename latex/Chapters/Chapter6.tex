@@ -1,22 +1,19 @@
 % Chapter 6
 
-\chapter{Conclusions} % Write in your own chapter title
+\chapter{Discussion} % Write in your own chapter title
 \label{Chapter6}
-\lhead{Chapter 6. \emph{Conclusions}} % Write in your own chapter title to set the page header
+\lhead{Chapter 6. \emph{Discussion}} % Write in your own chapter title to set the page header
 
+The MapReduce k-means clustering algorithm in this thesis found general player behaviour in a multiple batches of real game data. Results showed quality and stable clusters, the algorithm used efficient MR strategies by implementing a Combiner phase to reduce traffic and efficient vectorisation operations computing the nearest centroid in the Mapper phase. Scalable both horizontal and vertical using Amazon EMR, running multiple on-demand instances on a Hadoop cluster.
 
-\section{Conclusions}
-\textit{TODO Write Conclusions. Convince the reader that the research question was answered/solved. Write what is relevant to the research question. Use short statements directly related to the research question. }
+The algorithm clusters each data batch $n$-iterations resulting in centroids describing the a general player behaviour of each cluster, and incrementally clusters next incoming data batches by using the output from the previous batch as input to the next batch. So each data batch contributes to the general player behavior for the next batch. 
 
-\lipsum[1-2]
+Iterating only once per game data batch with the MR k-means algorithm resulted in higher quality and more stable clusters than increasing the number of iterations per batch. Allowing the centroids move slowly beetween different data batches, instead taking aggressive steps towards a data that will change in the next batch.
 
-\section{Summary of Contributions}
-\textit{TODO Describe the contributions may overlap Conclusions (Note: maybe move into Conclusions section). Short numbered statements.}
+Three player profiles were interpreted from the last game data batch, using the centroids of the clusters to describe the general player behaviours, after incrementally clustering the previous data batches. These player profiles were not evaluated by a game developer that developed the game under research but instead it was evaluated using the authors intuition.
 
-\lipsum[1]
+Evaluating the algorithm on a fictive dataset gave interesting results, where there was completely different behaviour, but was a fictive one. Three clusters are on a aggressive move and changes every data batch was a little bit more challence. The Iteration $2$ version was ranked highest in cluster quality and error stability, but Iteration $1$ was not far way. 
 
+The weakness for the algorithm is that it was not evaluated on larger multiple set of data batches, both in numbers and volume. Such that these results just indicate that for a real game data and a similar game it would be good to use one iteration and slowly after incrementally processing multiple batches the centroids will give high quality clusters and give a good representation of the general behaviors of the population. Also the $k$ number of clusters to be found by k-means was not tested with different numbers than $3$, this would be ofcourse be problem specific. Also interesting is to have the $k$ to adjust to evolving behaviors in the data. Looking into iterative MapReduce frameworks where there is possible to run $n$ iterations inside MapReduce instead of launching a MapReduce job each time (more overhead), would be a good research.
 
-\section{Future Research}
-\textit{TODO What is the future work. What can be done differently, what needs to be addressed?}
-
-\lipsum[1-2]
+The MR k-means algorithm can be applied to any game data and scales out when increasing the dataset size.

@@ -41,7 +41,7 @@
 \frontmatter	  % Begin Roman style (i, ii, iii, iv...) page numbering
 
 % Set up the Title Page
-\title  {Clustering Player Behaviors in Data Streams using K-means in MapReduce}
+\title  {Clustering Player Behavior in Data Streams using MapReduce}
 \authors  {\texorpdfstring
             {\href{sigurdurm@gmail.com}{Sigurdur Karl Magnusson}}
             {Sigurdur Karl Magnusson}
@@ -85,7 +85,8 @@ Albert Einstein
 \addcontentsline{toc}{chapter}{Abstract}
 \thispagestyle{plain}
 
-\lipsum[1]
+Data is everywhere and it gets larger and more complex everyday. Mobile phones, internet activities, such as in social networks and online games are huge contributors to the data around us. There is a need for more efficient and scalable data analyzing algorithms to find patterns and connections in this pile of data. Especially in the recent years, where rise of Free-to-Play games, easily have millions of users, drive their revenue through micro-transactions and use player behavioural analysis to learn better about their customers. In this thesis a clustering algorithm called MapReduce k-means is implemented that incrementally clusters multiple batches of real life game data. The algorithm successfully finds general behaviour profiles, described by behavioural features from the game data. Results show that MR k-means finds stable and quality clusters, is efficient and scales when the data increases.
+
 
 \clearpage  % Abstract ended, start a new page
 %% ----------------------------------------------------------------
@@ -96,7 +97,10 @@ Albert Einstein
 \acknowledgements{
 \addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
 
-The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
+This thesis could not have been done without my wife Ingunn! Big thanks to her for all the understanding and being such a good wife. I also want to thank my parents (Magnus and Sigurros), my parents-in-law (Gretar and Gunnvor) and my brother-in-law (Sverrir) for their support.
+
+
+Special thanks goes to Christian Thurau and Alaina Jensen
 
 }
 \clearpage  % End of the Acknowledgements
@@ -130,7 +134,23 @@ The acknowledgments and the people to thank go here, don't forget to include you
 \listofsymbols{ll}  % Include a list of Abbreviations (a table of two columns)
 {
 % \textbf{Acronym} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or \\
-\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere \\
+\textbf{AA} & \textbf{A}rchetype \textbf{A}nalysis\\
+\textbf{EMR} & \textbf{E}lastic \textbf{M}ap \textbf{R}educe \\
+\textbf{F2P} & \textbf{F}ree \textbf{T}o \textbf{P}lay \\
+\textbf{GA} & \textbf{G}ame \textbf{A}nalytics\\
+\textbf{GFS} & \textbf{G}oogle \textbf{F}ile \textbf{S}ystem \\
+\textbf{MR} & \textbf{M}ap\textbf{R}educe\\
+\textbf{MMO} & \textbf{M}assive \textbf{M}ultiplayer \textbf{O}nline \\
+\textbf{RPG} & \textbf{R}ole \textbf{P}lay \textbf{G}ame \\
+\textbf{SVIM} & \textbf{S}implex \textbf{V}olume \textbf{M}aximization \\
+\textbf{SaaS} & \textbf{S}oftware as a \textbf{S}ervice\\
+\textbf{SSE} & \textbf{S}um of \textbf{S}quared \textbf{E}rror \\
+\textbf{ZMN} & \textbf{Z}ero \textbf{M}ean \textbf{N}ormalization \\
+
+
+
+
+
 
 }
 
@@ -149,11 +169,11 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \input{./Chapters/Chapter4} % Methodology
 
-\input{./Chapters/Chapter5} % Results and Discussion
+\input{./Chapters/Chapter5} % Results
 
-\input{./Chapters/Chapter6} % Conclusions
+\input{./Chapters/Chapter6} % Discussion
 
-%\input{./Chapters/Chapter7} % Conclusion
+\input{./Chapters/Chapter7} % Conclusion
 
 %% ----------------------------------------------------------------
 % Now begin the Appendices, including them as separate files
@@ -162,7 +182,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
 
-\input{./Appendices/AppendixA}	% Appendix Title
+%\input{./Appendices/AppendixA}	% Appendix Title
 
 %\input{./Appendices/AppendixB} % Appendix Title
 

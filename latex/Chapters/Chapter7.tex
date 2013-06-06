@@ -1,0 +1,27 @@
+% Chapter 7
+
+\chapter{Conclusions} % Write in your own chapter title
+\label{Chapter7}
+\lhead{Chapter 7. \emph{Conclusions}} % Write in your own chapter title to set the page header
+
+Data is all around us and is inevitable, it has been around for a quite some time but is getting bolder and more complex to understand and work with. Using services like Amazon Elastic MapReduce web service and their simple web storage (S3) is a right step analyzing and understanding these gigantic volumes of data. Implementing algorithms that can be distributed and executed in parallel is a very powerful tool when using it on large-scale data. 
+
+Free online games (Free-to-Play) are increasing each day through, e.g. Facebook and Google Plus, generating revenue through in-game transactions. Data analysis and better understanding the customers and their player behaviour is a vital information to keep the customer in the game and to buy more virtual items using micro-transactions with real money. The games can be very complex and offer wide range of events and behaviour where millions of users interact to each other.
+
+The goals for this thesis were achieved and the contribution are the following:
+\begin{itemize}
+	\item A MapReduce k-means algorithm that can find general player behaviour in the real game data set provided by GameAnalyltics, by incrementally cluster multiple batches. And were interpreted to player profiles.
+	\item The algorithm finds stable and quality clusters while incrementally clustering multiple data batches, both for real game data and fictive generated datasets, where centroids move rapidly between batches.
+	\item The algorithm uses an efficient MR implementation function called Combiner, to minimize network and data traffic inside the MapReduce framework.
+	\item The algorithm uses efficient computation vectorisation approaches to perform fast operations on array like data objects, when computing the nearest centroid in the Mapper phase inside MR.
+\end{itemize}
+
+
+
+\subsection{Future Work}
+\begin{itemize}
+	\item Evaluate the algorithm over larger time periods, more number of data batches and in larger size and for different real life datasets. Interesting would to see if the algorithm continues to be stable.
+	\item Evaluate which number of iterations would give the best results to certain types of evolving datasets.
+	\item Looking into Iterative MapReduce frameworks that are much more efficient to deal with many iterations, by running a internal loop, meaning a separate control program is redundant.
+	\item Evaluate if there is a possibility to use a distance matrix computation efficiently to find the nearest centroid running on Amazon EMR, without running into memory troubles. E.g. using more powerful \textit{Master Controller} instance, or higher memory instance running on Hadoop.
+\end{itemize}
